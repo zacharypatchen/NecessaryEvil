@@ -1,3 +1,5 @@
+import java.util.Stack;
+
 class Solution {
     /**
      * This algorithm measures the amount of unique elements in a list.
@@ -43,7 +45,7 @@ class Solution {
      * In the worst case, when all digits are 9, the algorithm needs to iterate through the entire
      * array to find the first non-9 digit or reach the beginning of the array.
      *
-     * Space Complexity: O(1) for the in-place modification of the digits array.
+     * Space Complexity: S(1) for the in-place modification of the digits array.
      * The algorithm doesn't use any additional data structures that scale with the input size
      *
      * @param digits
@@ -78,16 +80,80 @@ class Solution {
         return digits;
     }
 
+    /**
+     * This code uses a stack to reverse the digits of the number and then compares the reversed
+     * number with the original number. If they match for every digit, the number is a palindrome.
+     *
+     * Time Complexity: O(log(x)), where x is the input number. The while loop that extracts digits
+     * from the number runs until the number becomes 0, and in each iteration, we reduce the number
+     * by a factor of 10. Therefore, the number of iterations is proportional to the number of digits
+     * in the input, which is log(x) in base 10.
+     *
+     * Space Complexity: O(log(x)) as well. In the worst case, the stack will store all the digits of
+     * the number, which is again proportional to the number of digits in the input.
+     *
+     * @param x - an integer
+     * @return true if a number is a palindrome. Otherwise, false.
+     */
+    public boolean isPalindrome(int x) {
+        if (x < 0) {
+            return false; // a negative number cannot be a palindrome
+        }
 
+        if (x < 10) {
+            return true; // a single-digit number is a palindrome
+        }
+
+        Stack<Integer> stack = new Stack<>();
+        int originalNumber = x;
+
+        // Push each digit of the number onto the stack
+        while (x != 0) {
+            int digit = x % 10;
+            stack.push(digit);
+            x /= 10;
+        }
+
+        // Pop each digit from the stack and compare with the original number
+        while (!stack.isEmpty()) {
+            int digit = stack.pop();
+            if (digit != originalNumber % 10) {
+                return false; // If digits don't match, it's not a palindrome
+            }
+            originalNumber /= 10;
+        }
+
+        return true;
+    }
+
+    /**
+     * This code takes advantage of the fact that each character represents a digit in base 26
+     * (A corresponds to 1, B to 2, ..., Z to 26). It iterates through the characters, converts each
+     * character to its corresponding value, and updates the result by multiplying it by 26 and adding
+     * the new value.
+     *
+     * Time Complexity: O(n), where n is the length of the columnTitle string. The loop iterates
+     * through each character in the string once, performing constant time operations for each character.
+     *
+     * Space Complexity: O(1), The algorithm uses a constant amount of space regardless of the input size.
+     *
+     * @return a numeric column value
+     * @param columnTitle
+     */
+    public int titleToNumber(String columnTitle) {
+        int result = 0;
+
+        for (int i = 0; i < columnTitle.length(); i++) {
+            char currentChar = columnTitle.charAt(i);
+            int charValue = currentChar - 'A' + 1; // Convert character to its corresponding value
+
+            result = result * 26 + charValue; // Multiply the current result by 26 and add the new value
+        }
+
+        return result;
+    }
 
     public static void main(String[] args) {
-        int [] test = {2,8,9,9};
-        Solution s = new Solution();
-        //int out = s.removeDuplicates(test);
-        //System.out.println(out);
-        int[] out = s.plusOne(test);
-        for(int x: out){
-            System.out.println(x);
-        }
+        //nothing for now
     }
 }
