@@ -294,19 +294,48 @@ class Solution {
         int m = nums1.length;
         int n = nums2.length;
 
+        // Initialize pointers for binary search in nums1
         int low = 0;
         int high = m;
 
         while (low <= high) {
-            int partitionX = (low + high) / 2;
-            int partitionY = (m + n + 1) / 2 - partitionX;
+            // Calculate partitions for nums1 and nums2
+            int partitionX = (low + high) / 2; //partition point in nums1
+            int partitionY = (m + n + 1) / 2 - partitionX; //partition in nums 2
 
+            // Find the maximum and minimum elements for the left and right partitions
             int maxX = (partitionX == 0) ? Integer.MIN_VALUE : nums1[partitionX - 1];
+                     /* int maxX;
+                        if (partitionX == 0) {
+                            maxX = Integer.MIN_VALUE;
+                        } else {
+                            maxX = nums1[partitionX - 1];
+                        }*/
+
             int minX = (partitionX == m) ? Integer.MAX_VALUE : nums1[partitionX];
+                    /*  int minX;
+                        if (partitionX == m) {
+                            minX = Integer.MAX_VALUE;
+                        } else {
+                            minX = nums1[partitionX];
+                        }*/
 
             int maxY = (partitionY == 0) ? Integer.MIN_VALUE : nums2[partitionY - 1];
+                        /*
+                        int maxY;
+                        if (partitionY == 0) {
+                            maxY = Integer.MIN_VALUE;
+                        } else {
+                            maxY = nums2[partitionY - 1];
+                        }*/
             int minY = (partitionY == n) ? Integer.MAX_VALUE : nums2[partitionY];
-
+                        /*
+                        int minY;
+                        if (partitionY == n) {
+                           minY = Integer.MAX_VALUE;
+                        } else {
+                            minY = nums2[partitionY];
+                        } */
             if (maxX <= minY && maxY <= minX) {
                 // Correct partition found
                 if ((m + n) % 2 == 0) {
@@ -324,8 +353,7 @@ class Solution {
                 low = partitionX + 1;
             }
         }
-
-        // Control should never reach here in a valid input scenario
+        // The input arrays were not sorted, so we shouldn't reach this point in a valid scenario.
         throw new IllegalArgumentException("Input arrays are not sorted.");
     }
 
