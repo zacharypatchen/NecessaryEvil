@@ -1,38 +1,30 @@
-import java.util.Arrays;
 import java.util.Stack;
 
 class Solution {
     /**
-     * This algorithm measures the amount of unique elements in a list.
-     * Once a unique element is found it will be placed at the index of
-     * uniqueCount in the array.
+     * Given the head of a sorted linked list, delete all duplicates such that each element appears only once.
+     * Return the linked list sorted as well.
      *
-     * Time complexity of O(N)
-     * Space complexity of S(1)
+     * Time Complexity: O(n), where n is the number of nodes in the linked list.
+     * The algorithm iterates through the entire linked list once.
+     * Space Complexity: O(1).
+     * The algorithm uses a constant amount of extra space for the currentNode variable.
      *
-     * @param nums
-     * @return size of array with unique elements only
+     * @param head
+     * @return head
      */
-    public int removeDuplicates(int[] nums) {
-        // check if the array is empty
-        if (nums.length == 0) {
-            return 0; // if empty, there are no unique elements
-        }
-
-        int uniqueCount = 1;  // at least one unique element (the first element)
-
-        // iterate through the array starting from the second element
-        for (int i = 1; i < nums.length; i++) {
-            // check if the current element is different from the previous one
-            if (nums[i] != nums[i - 1]) {
-                // found a new unique element
-                nums[uniqueCount] = nums[i]; // place the unique element in the next position
-                uniqueCount++; // increment the count of unique elements
+    public ListNode deleteDuplicateO(ListNode head) {
+            ListNode currentNode = head; // assign head of list to member variable currentNode
+            while(currentNode!=null && currentNode.next!=null){ // iterate up to the tail of the list
+                if(currentNode.next.val == currentNode.val){ // if a node's value matches the next node's value we
+                                                             // have found a duplicate
+                    currentNode.next = currentNode.next.next; //  swap the successor node for duplicate
+                                                              // (i.e the node after the dup)
+                } else {
+                    currentNode = currentNode.next; // normal traversal
+                }
             }
-        }
-
-        // uniqueCount represents the number of unique elements in the modified array
-        return uniqueCount;
+            return head;
     }
 
     /**
@@ -40,45 +32,35 @@ class Solution {
      * finding the first non-9 digit (or reaching the beginning if all digits are 9).
      * If all digits are 9, it creates a new array with an extra digit at the beginning.
      * Otherwise, it increments the first non-9 digit found.
-     * If the last digit is not 9, it simply increments it by 1
+     * If the last digit is not 9, it simply increments it by 1.
      *
      * Time Complexity: O(n), where n is the length of the input array digits.
      * In the worst case, when all digits are 9, the algorithm needs to iterate through the entire
      * array to find the first non-9 digit or reach the beginning of the array.
      *
-     * Space Complexity: S(1) for the in-place modification of the digits array.
-     * The algorithm doesn't use any additional data structures that scale with the input size
+     * Space Complexity: O(1) for the in-place modification of the digits array.
+     * The algorithm doesn't use any additional data structures that scale with the input size.
      *
-     * @param digits
-     * @return a number represented as an array which has been incremented by one
+     * @param digits - an array representing a number
+     * @return a new array representing the number obtained by incrementing the input array by one
      */
     public int[] plusOne(int[] digits) {
 
         int n = digits.length;
-
-        // check if the last digit is 9
-        if (digits[n - 1] == 9) {
-            // iterate from the end of the array to find the first non-9 digit
-            int i = n - 1;
-            while (i >= 0 && digits[i] == 9) {
-                digits[i] = 0; // set the current digit to 0
-                i--;
+        for (int i = n-1; i >= 0; i--){ // traverse backwards through array starting at last index
+            if(digits[i] <9){ // this handles digits less than 9 in which we simply increment the last digit of the
+                digits[i]++;  // array if it is not equal to 9 (i.e [1,2,3] -> [1,2,4]) then return the array
+                return digits; // or in the case where we have incremented 9 to 0 and are still looping
+                               // i.e [1,2,0] -> [1,3,0]
             }
-
-            // if all digits were 9, we need to add an extra digit at the beginning
-            if (i == -1) {
-                int[] result = new int[n + 1];
-                result[0] = 1; // set the first digit to 1
-                return result;
-            } else {
-                digits[i]++; // increment the non-9 digit
-            }
-        } else {
-            // the last digit is not 9, so simply add 1 to it
-            digits[n - 1]++;
+            digits[i] = 0; // if the digit is 9 we swap it with 0 and continue looping;
         }
-
-        return digits;
+        int [] newNumber = new int[n+1]; // in order to reach this condition our input must be all 9s. By this point
+                                         // the array has been transformed to all 0s from the previous line of code
+                                         // so, we must create a new array with size n+1 larger with its first digit
+                                         // being 1. Example: [9, 9, 9] -> [0,0,0] -> [1,0,0,0]
+        newNumber[0] =1;
+        return newNumber;
     }
 
     /**
@@ -143,8 +125,8 @@ class Solution {
      */
     public int titleToNumber(String columnTitle) {
         int result = 0;
-
-        for (int i = 0; i < columnTitle.length(); i++) {
+        int n = columnTitle.length();
+        for (int i = 0; i < n; i++) {
             char currentChar = columnTitle.charAt(i);
             int charValue = currentChar - 'A' + 1; // convert character to its corresponding value
 
@@ -153,15 +135,6 @@ class Solution {
 
         return result;
     }
-
-
-    public class ListNode {
-          int val;
-          ListNode next;
-          ListNode() {}
-          ListNode(int val) { this.val = val; }
-          ListNode(int val, ListNode next) { this.val = val; this.next = next; }
-     }
 
     /**
      * This algorithm maintains a dummy node and a current pointer to keep track of the merged list.
@@ -217,14 +190,14 @@ class Solution {
      *
      * Time Complexity: O(N), where N is the number of nodes in the linked list.
      *
-     * Space Complexity:  S(1) since it uses a constant amount of extra space regardless of the input size.
+     * Space Complexity:  O(1) since it uses a constant amount of extra space regardless of the input size.
      *
      * @param head
-     * @param n
+     * @param n the nth node from the end of list to be removed
      * @return the modified list, starting from the next node of the dummy node
      */
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        ListNode dummy = new ListNode(0); // dummy node to simplify code
+        ListNode dummy = new ListNode(); // dummy node to simplify code
         dummy.next = head;
 
         ListNode first = dummy;
@@ -253,7 +226,7 @@ class Solution {
      *
      * Time Complexity: O(n), where n is the length of the input array, as it iterates through the array once.
      *
-     * Space Complexity: S(1) since it uses only a constant amount of extra space
+     * Space Complexity: O(1) since it uses only a constant amount of extra space
      *
      * @param nums
      */
@@ -299,7 +272,7 @@ class Solution {
      * that the partitioning condition is satisfied for both arrays. The median is then
      * calculated based on the elements at the partitioned indices.
      *
-     * Time Complexity: O(log(min(m, n))), the binary search is performed on the smaller of the two arrays.
+     * Time Complexity: O(log(m, n)), the binary search is performed on the smaller of the two arrays.
      * The time complexity is logarithmic because, in each step, we are reducing the search space by half.
      *
      * Space Complexity: O(1), the algorithm uses a constant amount of extra space regardless of the input size.
