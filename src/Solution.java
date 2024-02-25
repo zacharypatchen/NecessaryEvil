@@ -13,7 +13,7 @@ class Solution {
      * @param head
      * @return head
      */
-    public ListNode deleteDuplicateO(ListNode head) {
+    public ListNode deleteDuplicates(ListNode head) {
             ListNode currentNode = head; // assign head of list to member variable currentNode
             while(currentNode!=null && currentNode.next!=null){ // iterate up to the tail of the list
                 if(currentNode.next.val == currentNode.val){ // if a node's value matches the next node's value we
